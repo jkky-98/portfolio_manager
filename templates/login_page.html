@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio-manager Login</title>
+    <style>
+        /* reset */
+        /* http://meyerweb.com/eric/tools/css/reset/
+        v2.0 | 20110126
+        License: none (public domain)
+        */
+        html, body, div, span, applet, object, iframe,
+        h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+        a, abbr, acronym, address, big, cite, code,
+        del, dfn, em, img, ins, kbd, q, s, samp,
+        small, strike, strong, sub, sup, tt, var,
+        b, u, i, center,
+        dl, dt, dd, ol, ul, li,
+        fieldset, form, label, legend,
+        table, caption, tbody, tfoot, thead, tr, th, td,
+        article, aside, canvas, details, embed,
+        figure, figcaption, footer, header, hgroup,
+        menu, nav, output, ruby, section, summary,
+        time, mark, audio, video {
+            margin: 0;
+            padding: 0;
+            border: 0;
+            font-size: 100%;
+            font: inherit;
+            vertical-align: baseline;
+        }
+        /* HTML5 display-role reset for older browsers */
+        article, aside, details, figcaption, figure,
+        footer, header, hgroup, menu, nav, section {
+            display: block;
+        }
+        body {
+            line-height: 1;
+        }
+        ol, ul {
+            list-style: none;
+        }
+        blockquote, q {
+            quotes: none;
+        }
+        blockquote:before, blockquote:after,
+        q:before, q:after {
+            content: '';
+            content: none;
+        }
+        table {
+            border-collapse: collapse;
+            border-spacing: 0;
+        }
+
+        /*
+            start custom css
+        */
+        #wrap {
+            position: relative;
+
+        }
+        .section01 {
+            position: relative;
+            height: 100vh;
+            background-color: #f7f7f7;
+        }
+        .contents {
+            box-sizing: border-box;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            background: #ffffff;
+        }
+        .login-content {
+            width: 400px;
+            margin: 0 auto;
+            padding: 40px 0;
+            position: relative;
+        }
+        .login-form-container {
+            margin-bottom: 30px;
+        }
+        .login-form-input {
+            width: 100%;
+            position: relative;
+        }
+        input {
+            padding-left: 45px;
+            outline: 0;
+            width: 100%;
+            padding: 12px 14px 8px;
+            border: none;
+            border-bottom: 1px solid #e5e5e5;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+        label {
+            cursor: text;
+            position: absolute;
+            left: 12px;
+            bottom: 18px;
+            color: #999999;
+            -webkit-transform: translate(0, 50%);
+            -ms-transform: translate(0, 50%);
+            transform: translate(0, 50%);
+            -webkit-transition: all 0.3s ease;
+            -o-transition: all 0.3s ease;
+            transition: all 0.3s ease;
+        }
+        input:focus + label, label.on  {
+            -webkit-transform:translate(0, 0);
+            -ms-transform:translate(0, 0);
+            transform:translate(0, 0);
+            bottom:38px;
+            left: 5px;
+            font-size: 12px;
+            color: #999999
+        }
+        .link-container {
+            width: 100%;
+            text-align: center;
+            margin-top: 20px;
+        }
+        .link-btn.login {
+            display: inline-block;
+            width: 150px;
+            padding: 20px 30px;
+            border-radius: 10px;
+            cursor: pointer;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+            background-color: #47b2b9;
+            -webkit-transition: all 0.3s ease;
+            -o-transition: all 0.3s ease;
+            transition: all 0.3s ease;
+        }
+        .link-btn.login:hover {
+            background-color: rgb(88, 198, 206)
+        }
+        .link-btn.login span {
+            color: #fff
+        }
+        .link-btn.join {
+            cursor: pointer;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div id="wrap">
+        <div class="section01">
+            <div class="contents">
+                <h1>{{ error_msg }}</h1>
+                <div class="login-content">
+                    <form name="login_form" action="/login" method="post">
+                        <div class="login-form-container">
+                            <div class="login-form-wrap">
+                                <div class="login-form-area">
+                                    <div class="login-form-input">
+                                        <input id="user_name" class="login-input" name="user_name" type="text">
+                                        <label for="ID">ID</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="login-form-container">
+                            <div class="login-form-wrap">
+                                <div class="login-form-area">
+                                    <div class="login-form-input">
+                                        <input id="user_password" class="login-input" name="user_password" type="password" autocomplete="off">
+                                        <label for="password">password</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="link-container">
+                            <a class="link-btn login">
+                                <span aria-hidden="true" data-icon="&#xe000;" onclick="login_form.submit()">Submit</span>
+                            </a>
+                        </div>
+                        <div class="link-container">
+                            <a class="link-btn join">
+                                <span class="txt">Join</span>
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script
+  src="https://code.jquery.com/jquery-2.2.4.min.js"
+  integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+  crossorigin="anonymous"></script>
+<script>
+    var inputFunc;
+
+    $(function(){
+        inputFunc = new InputFunc();
+        inputFunc.init('.login-input');
+	});
+
+    var InputFunc = function () {
+        var input, label;
+
+        this.init = function (_el) {
+            setTimeout(function () {
+                input = $(_el);
+                label = input.next('label');
+
+                if (!input[0]) return false;
+
+                input.on('focusout',function(){
+                    var _thisInput = $(this),
+                        _text = _thisInput.val(),
+                        _label = _thisInput.next('label'),
+                        _valLength = _text.length;
+
+                    if ( _valLength >= 1 ) {
+                        _label.addClass('on');
+                    } else if ( _valLength == 0 ) {
+                        _label.removeClass('on');
+                    }
+                })
+            }, 0)
+        }
+
+        // function lengthCheck () {
+
+        // }
+    }
+
+    window.devFunc = function () {
+        function testFunc () {
+
+        }
+
+        return {
+            testFunc : testFunc
+        }
+    }
+</script>
+</html>

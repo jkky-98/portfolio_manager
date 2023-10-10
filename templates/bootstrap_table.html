@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>{{ database_name }}</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+  <script>
+    function get_stock_price(){
+      $.ajax({
+        type : 'GET',
+        url : '/show-all',
+        dataType: "json",
+        success : function(response){
+          var stockArr = Object.entries(response)
+          $('.stock').children().remove(); // to remove already existing code
+
+          for (var i = 0; i < stockArr.length; i++) {
+            var stock_code = stockArr[i][0]; // to get json key for each iteration
+            var stock_price = response[stock_code]["current_price"]; // to get value by using key(stock_code)
+            var trade_history = response[stock_code]["trade_history"];
+            var tradeArr = Object.entries(trade_history);
+
+            for (var n = 0; n < tradeArr.length; n++) {
+                var trade_id = tradeArr[n][0];
+                var trade_contents = trade_history[trade_id];
+
+                var open_date = trade_contents[0];
+                var trade_type = trade_contents[1];
+                var amount = trade_contents[2];
+                var open_price = trade_contents[3];
+                var commission = trade_contents[4];
+
+              var stock_table_html = `
+              <tr data-name=${stock_code}>
+              <td class="stock_code">${stock_code}</td>
+              <td class="stock_price">${stock_price}</td>
+              <td class="open_date">${open_date}</td>
+              <td class="trade_type">${trade_type}</td>
+              <td class="amount">${amount}</td>
+              <td class="open_price">${open_price}</td>
+              <td class="commission">${commission}</td>
+              </tr>
+            `;
+
+              $('.stock').append(stock_table_html);
+            }
+          }
+        },
+        error : function(xtr, status, error){
+          alert(status + ":" + error);
+        }
+      });
+      // setTimeout(get_stock_price, 30000)
+    }
+    function push_stock_price(){
+        ws = new WebSocket("ws://localhost:8888/ws");
+
+        // Handle incoming websocket message callback
+        ws.onmessage = function (evt) {
+            var stockArr = JSON.parse(evt.data)
+            var stock_code = Object.keys(stockArr)[0]
+            var stock_price = stockArr[stock_code];
+
+            var stock_code_children = document.querySelectorAll('[data-name="' + CSS.escape(stock_code) + '"]');
+
+            for (var n = 0; n < stock_code_children.length; n++) {
+                var price = $(stock_code_children[n].getElementsByClassName('stock_price')[0])
+
+                price.text(stock_price);
+                console.log("Message Received: " + evt.data);
+            }
+        };
+    }
+
+    get_stock_price()
+    push_stock_price()
+
+</script>
+</head>
+<body>
+
+<div class="container">
+  <h2> Current Stock Price </h2>
+  <table class="table" id="stock_table">
+    <thead>
+      <tr>
+         <th scope="col">Stock Code</th>
+         <th scope="col">Current Stock Price</th>
+         <th scope="col">Open Date</th>
+         <th scope="col">Trade Type</th>
+         <th scope="col">Amount</th>
+         <th scope="col">Open Price</th>
+         <th scope="col">Commission</th>
+
+      </tr>
+    </thead>
+      <tbody class = "stock">
+        <!-- insert stock_code and stock_price from javascript -->
+    </tbody>
+  </table>
+</div>
+
+</body>
+</html>
